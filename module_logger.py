@@ -6,10 +6,20 @@ class LogModule:
 
     def __init__(self, config={}, log_path=None, checker=None, config_writer=None,
                  header_writer=None, writer=None, sep=None,  name_comment=None):
+        """
+        Конструктор (?).
+        :param config (dict): Конфигурация
+        :param log_path (str): Каталог с логами
+        :param checker (callable): Функция проверки имени
+        :param config_writer (callable): Функция записи конфига в лог
+        :param header_writer (callable): Функция записи заголовка в лог
+        :param writer (callable): Функция записи событий в лог
+        :param sep (callable): Функция, возвращающая разделитель для лога
+        :param name_comment (str): Комментарий в конце имени файла лога
+        """
         # приоритет за параметрами, переданными напрямую
         # если параметр None, то проверяется config
         # если нет в конфиге, то вызывается default (кроме log_path)
-
 
         self.config = config
 
@@ -201,6 +211,10 @@ class LogModule:
             f.write(sep())
 
     def default_writer(self=None, content=""):
+        """
+        Способ записи в лог по умолчанию
+        :param content (str): Строка, которую надо записать в лог
+        """
         with open(self.log_file_path, 'a', encoding='utf-8') as f:
             f.write(f"{tech.today_str()} {tech.time_str()}|| {str(content)}")
             f.write(self.sep())
@@ -215,6 +229,7 @@ class LogModule:
         return f"log_file_path: {self.log_file_path}"
 
     def __repr__(self):
+
         return (f"log_file_path: {self.log_file_path} \n"
                 f"num_of_writes: {self.num_of_writes}\n"
                 f"{self.config}")
@@ -263,3 +278,4 @@ if __name__ == "__main__":
 #change 2
 #change 3 for commit 2
 
+#change 4
