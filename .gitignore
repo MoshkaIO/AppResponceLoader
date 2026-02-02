@@ -1,3 +1,4 @@
 ignore/
 test_module.py
 .idea/
+__pycache__/
