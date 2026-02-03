@@ -30,8 +30,8 @@ def time_str():
 
 def check_format_1(content):
     """
-    Проверяет соответствие строки регулярному выражению
-    
+    Проверяет соответствие строки регулярному выражению r'\(\d+\.\d+\) \d\d\.\d\d\.\d{4} \d\d-\d\d.*'
+
     :param content: Строка для проверки
     :return (bool): Результат проверки
     """
@@ -39,19 +39,38 @@ def check_format_1(content):
 
 
 def check_format_2(content):
+    """
+    Проверяет соответствие строки регулярному выражению r'\(\d+\.\d+\).*'
+
+    :param content: Строка для проверки
+    :return (bool): Результат проверки
+    """
     return re.search(r'\(\d+\.\d+\).*', content)
 
 
 def find_launch_num(filename):
+    """
+    Находит номер запуска по имени файла
+    :param filename (str): имя файла
+    :return (int): номер запуска
+    """
     return int(re.findall(r'\d+', filename)[1])
 
+def find_launch_day(filename):
+    """
+    Находит день запуска по имени файла
+    :param filename (str): имя файла
+    :return (int): день запуска
+    """
+    return int(re.findall(r'\d+', filename)[0])
 
 def find_launch_date(filename):
+    """
+    Находит дату запуска по имени файла
+    :param filename (str): имя файла
+    :return (str): дату запуска
+    """
     return re.search(r'\d\d\.\d\d\.\d{4}', filename)[0]
-
-
-def find_launch_day(filename):
-    return int(re.findall(r'\d+', filename)[0])
 
 
 def checkType(object, need_type, object_name="Объект"):
@@ -76,17 +95,22 @@ def checkType(object, need_type, object_name="Объект"):
 
 
 def custom_sep_1():
+    """
+    Возвращает строку-разделитель
+    :return (str): строка-разделитель
+    """
     return "\n\n//////////////////////////////\n\n"
 
 
 def custom_config_writer(self=None, sep=None, log_file_path=None, config=None):
     """
     Пример пользовательской функции записи конфигурации в лог
-    :param self:
-    :param sep:
-    :param log_file_path:
-    :param config:
-    :return:
+
+        :param self (class LogModule): объект логгера
+        :param sep (calleble): Функцию, возвращающая разделитель
+        :param log_file_path (str): Путь к файлу лога
+        :param config (dict): Конфиг
+        :return: None
     """
     if log_file_path is None:
         log_file_path = self.log_file_path
@@ -105,11 +129,11 @@ def custom_header_writer(self=None, sep=None, log_file_path=None, content=None):
     """
     Пример пользовательской функции записи заголовка в лог
 
-    :param self:
-    :param sep:
-    :param log_file_path:
-    :param content:
-    :return:
+        :param self (class LogModule): объект логгера
+        :param sep (calleble): Функцию, возвращающая разделитель
+        :param log_file_path (str): Путь к файлу лога
+        :param content(str): Строка для записи в заголовок
+        :return: None
     """
     if log_file_path is None:
         log_file_path = self.log_file_path
@@ -124,6 +148,12 @@ def custom_header_writer(self=None, sep=None, log_file_path=None, content=None):
 
 
 def find_checker(checker_name):
+    """
+    Ищет checker по имени
+
+        :param checker_name (str): Название checker-
+        :return (calleble): Найденный checker
+    """
     #ищет нужный checker из нескольких возможных (мне стоит заготовить несколько)
     match checker_name:
         case "checker1":
@@ -133,6 +163,13 @@ def find_checker(checker_name):
 
 
 def log_path_define(self, log_path):
+    """
+    Устанавливает значение полю log_path
+
+        :param self (class LogModule): объект логгера
+        :param log_path: путь к файлу лога
+        :return: None
+    """
     if log_path is None:
         if isinstance(self.config, dict):
             if "log_path" in self.config:
@@ -148,9 +185,9 @@ def checker_define(self, checker):
     """
     Устанавливает значение полю checker
 
-    :param self: объкт, содержащий поле checker
-    :param checker: Приоритетное значение checker
-    :return:
+        :param self (class LogModule): объект логгера
+        :param checker (calleble): Приоритетное значение checker
+        :return: None
     """
     if checker is None:
         if isinstance(self.config, dict):  # следующая проверка требует это условие
@@ -163,6 +200,13 @@ def checker_define(self, checker):
 
 
 def config_writer_define(self, config_writer):
+    """
+    Устанавливает значению полю config_writer
+
+        :param self (class LogModule): объект логгера
+        :param config_writer (calleble): Приоритетное значение config_writer
+        :return: None
+    """
     if config_writer is None:
         if isinstance(self.config, dict):
             if "config_writter" in self.config:
@@ -174,6 +218,13 @@ def config_writer_define(self, config_writer):
 
 
 def header_writer_define(self, header_writer):
+    """
+    Устанавливает значению полю header_writer
+
+        :param self (class LogModule): Объект логгера
+        :param header_writer (calleble): Приоритетное значение header_writer
+        :return: None
+    """
     if header_writer is None:
         if isinstance(self.config, dict):
             if "header_writer" in self.config:
@@ -185,6 +236,13 @@ def header_writer_define(self, header_writer):
 
 
 def writer_define(self, writer):
+    """
+    Устанавливает значению полю writer
+
+        :param self (class LogModule): Объект логгера
+        :param writer (calleble): Приоритетное значение writer
+        :return: None
+    """
     if writer is None:
         if isinstance(self.config, dict):
             if "writer" in self.config:
@@ -196,6 +254,13 @@ def writer_define(self, writer):
 
 
 def sep_define(self, sep):
+    """
+    Устанавливает значению полю sep
+
+        :param self (class LogModule): Объект логгера
+        :param sep (calleble): Приоритетное значение sep
+        :return: None
+    """
     if sep is None:
         if isinstance(self.config, dict):
             if "sep" in self.config:
@@ -207,6 +272,13 @@ def sep_define(self, sep):
 
 
 def name_comment_define(self, name_comment):
+    """
+    Устанавливает значению полю name_comment
+
+        :param self (class LogModule): Объект логгера
+        :param name_comment (calleble): Приоритетное значение name_comment
+        :return: None
+    """
     if name_comment is None:
         if isinstance(self.config, dict):
             if "name_comment" in self.config:
@@ -218,34 +290,72 @@ def name_comment_define(self, name_comment):
 
 
 def check_log_path(log_path):
+    """
+    Проверяет, соответствует ли log_path требованиям
+    (имеет тип str)
+
+        :return (str):  Присвоенное значение
+    """
     return checkType(log_path, str, "log_path")  # может быть надо сразу self.log_path
 
 
 # log_path, checker, config_writer, header_writer, writer, sep, name_comment
 
 def check_checker(checker):
-    """ Проверка, что checker является callable"""
+    """
+    Проверяет, соответствует ли checker требованиям
+    (имеет тип callable)
+
+        :return (callable):  Присвоенное значение
+    """
     return checkType(checker, callable, "checker")
 
 
 def check_config_writer(config_writer):
+    """
+    Проверяет, соответствует ли config_writer требованиям
+    (имеет тип callable)
+
+        :return (callable):  Присвоенное значение
+    """
     return checkType(config_writer, callable, "config_writer")
 
 
 def check_header_writer(header_writer):
+    """
+    Проверяет, соответствует ли header_writer требованиям
+    (имеет тип callable)
+
+        :return (callable):  Присвоенное значение
+    """
     return checkType(header_writer, callable, "header_writer")
 
 
 def check_writer(writer):
+    """
+    Проверяет, соответствует ли writer требованиям
+    (имеет тип callable)
+
+        :return (callable):  Присвоенное значение
+    """
     return checkType(writer, callable, "writer")
 
 
 def check_sep(sep):
+    """
+    Проверяет, соответствует ли sep требованиям
+    (имеет тип callable)
+
+        :return (callable):  Присвоенное значение
+    """
     return checkType(sep, callable, "sep")
 
 
 def check_name_comment(name_comment):
+    """
+    Проверяет, соответствует ли name_comment требованиям
+    (имеет тип callable)
+
+        :return (callable):  Присвоенное значение
+    """
     return checkType(name_comment, callable, "name_comment")
-
-
-# new commit from main (no testing!!!1!) 2
