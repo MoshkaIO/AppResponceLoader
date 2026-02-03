@@ -4,22 +4,37 @@ import re
 
 # технические функции логгера
 def today_str():
+    """
+    Возвращает текущую дату
+    :return (str): Текущая дата в формате "%d.%m.%Y"
+    """
     now = datetime.now()
     return now.strftime("%d.%m.%Y")
     # return f"{now.day}.{now.month}.{now.year}"
 
 
 def time_str():
+    """
+        Возвращает текущее время
+        :return (str): Текущее время в формате "%H-%M"
+    """
     now = datetime.now()
     return f"{now.hour}-{now.minute}"
 
 
-def time_hh_mm_ss_str():
-    now = datetime.now()
-    return f"{now.hour}-{now.minute}-{now.second}"
+# def time_hh_mm_ss_str():
+#
+#     now = datetime.now()
+#     return f"{now.hour}-{now.minute}-{now.second}"
 
 
 def check_format_1(content):
+    """
+    Проверяет соответствие строки регулярному выражению
+    
+    :param content: Строка для проверки
+    :return (bool): Результат проверки
+    """
     return re.search(r'\(\d+\.\d+\) \d\d\.\d\d\.\d{4} \d\d-\d\d.*', content)
 
 
