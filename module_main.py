@@ -7,7 +7,11 @@ from datetime import datetime
 class MainModule:
 
     def __init__(self, config):
+        """
+        Конструктор
 
+        :param config (dict/str): Конфигурация
+        """
         self.config = self.check_config(config)
 
         self.hostgroup_id_path = self.config["hostgroup_id_path"]
@@ -28,13 +32,22 @@ class MainModule:
         self.run()
 
     def check_config(self, config):
+        """
+        Проверяет тип конфигурации и при необходимости загружает её
+
+        :param (dct/str) config:
+        :return (dct): Конфигурация
+        """
         if isinstance(config, str):  # предполагается, что это путь к файлу конфигурации
             return read_module.read_config(config)
         if isinstance(config, dict):
             return config
 
     def run(self):
-
+        """
+        Загружает остальные данные и запускает цикл
+        :return:
+        """
         self.create_log()
         self.start = 1769418900
         self.end = 1769422500
@@ -48,9 +61,17 @@ class MainModule:
         self.cycle()
 
     def create_log(self):
+        """
+        Создает лог для записи хода работ
+        """
         self.log = log_module.LogModule(self.config)
 
     def cycle(self):
+        """
+        Находит пары хостов для всех пар хост-групп всех сервисов, между которыми были соединения в течение указанного
+        промежутка времени.
+        :return:
+        """
         for service in self.services.keys():
             hostgroup_pairs = self.services[service]
             for hostgroup_pair in hostgroup_pairs:
@@ -72,21 +93,48 @@ class MainModule:
                     continue
 
     def iteration(self, host_group_name_1, host_group_name_2):
+        """
+        Находит все пары хостов из приведенных хост-групп, имеющие между собой соединения
+
+        :param host_group_name_1: имя первой хост-группы
+        :param host_group_name_2: имя второй хост-группы
+        :return: список кортежей, состоящих из пар хостов и числа активных соединений между ними
+        """
         host_group_id_1 = self.hostgroup_ids[host_group_name_1]
         host_group_id_2 = self.hostgroup_ids[host_group_name_2]
-        self.message(f"iteration {host_group_name_1} <---> {host_group_name_2}")
+        self.message(f"iteration {host_group_name_1} <---> {host_group_name_2}") # запись в лог
         result = find_module.find_host_pairs_between_hostgroups(self.ar, host_group_id_1, host_group_id_2, self.start,
                                                                 self.end)
         return result
 
     def message(self, content):  # и в лог и в консоль
+        """
+        Записывает сообщение и в лог и в консоль
+
+            :param content (str): Сообщение для записи
+        """
         self.log.write(content)
         print(content)
 
     def write(self, service_name, host_group_name_1, host_group_name_2, result):
+        """
+        Вызывает функцию записи в файл и передает ей аргументы
+        :param service_name (str): название сервиса
+        :param host_group_name_1 (str): имя первой хост-группы
+        :param host_group_name_2 (str): имя второй хост-группы
+        :param result :
+        :return:
+        """
         wr_module.check_write(self.host_pair_path, service_name, host_group_name_1, host_group_name_2, result)
 
     def report_time(self):  #эту функцию лучше вынести в отдельный технический файл
+        """
+        Устанавливает временной интервал для анализа
+
+            Начало и конец интервала задаются в конфигурации в формате "%d.%m.%Y %H:%M",
+            функция преобразует их в unix timestamp
+        :return:
+        """
         start_time=self.config["start_time"]
         end_time=self.config["end_time"]
         #парсим дату и время из строки и переводим в unix timestamp
@@ -114,6 +162,10 @@ def test2():
 
 
 def default_config():
+    """
+    Конфигурация по умолчанию, используется в тестах без файлов конфига
+    :return:
+    """
     config = {
         "hostgroup_id_path": "C:\\Users\\mioffe\\Documents\\Проекты\\RSHBMON2\\входные данные\\scriptHostPairs\\host_group_ids.csv",
         "hostgroup_pair_path": "C:\\Users\\mioffe\\Documents\\Проекты\\RSHBMON2\\входные данные\\scriptHostPairs\\testPairs",
@@ -152,3 +204,6 @@ def test6():
 
 if __name__ == "__main__":
     test6()
+
+
+# branch testing 2 first commit ok?
